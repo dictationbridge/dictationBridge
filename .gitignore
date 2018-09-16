@@ -23,3 +23,10 @@ addon/doc/en/
 .vscode
 *.xml
 *.WSRMac
+*.tlb
+*.obj
+*.exe
+*.pyc
+*.lib
+*.dll
+.sconsign.dblite

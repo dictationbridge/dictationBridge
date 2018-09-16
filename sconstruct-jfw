@@ -1,0 +1,19 @@
+env = Environment(HOST_ARCH = 'x86')
+
+env.Append(CXXFLAGS=['/EHsc'])
+
+dbCore = SConscript(['dictationbridge-core/SConstruct'])
+dbCoreFiles = dbCore[0]
+DictationBridgeJFWHelper = env.Program(
+	target='DictationBridgeJFWHelper',
+	source=['fsapi_i.c','ProcessMonitor.cpp','DictationBridgeJFWHelper.cpp'],
+	LIBS = 'DictationBridgeMaster32',
+	LIBPATH = 'dictationbridge-core/build/x86/master',
+    LINKFLAGS = "/SUBSYSTEM:WINDOWS",
+)
+
+
+dist = Dir('dist')
+env.Install(dist, DictationBridgeJFWHelper)
+for i in dbCore[0]+dbCore[1]:
+	env.Install(dist, i)
