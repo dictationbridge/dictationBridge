@@ -47,7 +47,8 @@ def onInstall(postPathBug = False):
 	if value is None:
 		value = ""
 	dir = os.path.dirname(__file__)
-	if not isinstance(dir, unicode):
+	unicodestr = str if py3 else unicode
+	if not isinstance(dir, unicodestr):
 		dir = dir.decode(sys.getfilesystemencoding())
 	dir = dir.replace(addonHandler.ADDON_PENDINGINSTALL_SUFFIX, "")
 	log.info("addon directory: %r" % dir)
@@ -73,7 +74,8 @@ def onUninstall():
 	if value is None or value == "":
 		return
 	dir = os.path.dirname(__file__)
-	if not isinstance(dir, unicode):
+	unicodestr = str if py3 else unicode
+	if not isinstance(dir, unicodestr):
 		dir = dir.decode(sys.getfilesystemencoding())
 	dir = dir.replace(addonHandler.DELETEDIR_SUFFIX, "")
 	if value.find(dir) != -1:
