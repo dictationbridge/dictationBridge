@@ -27,8 +27,7 @@ from globalPluginHandler import GlobalPlugin as BaseGlobalPlugin
 from logHandler import log
 from NVDAObjects import NVDAObject
 from NVDAObjects.IAccessible import getNVDAObjectFromEvent
-from win32api import *
-from dictationGesture import DictationGesture
+from .dictationGesture import DictationGesture
 import inputCore
 
 addonRootDir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
