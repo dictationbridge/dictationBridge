@@ -2,7 +2,11 @@ import ctypes
 from ctypes import wintypes
 import os
 import sys
-import _winreg
+py3 = sys.version_info.major == 3
+if py3:
+	import winreg
+else:
+	import _winreg as winreg
 import addonHandler
 from logHandler import log
 import winUser
@@ -35,11 +39,11 @@ def onInstall(postPathBug = False):
 				"w") as fi:
 				fi.write("dbInstall")
 				return
-	key = _winreg.OpenKeyEx(_winreg.HKEY_CURRENT_USER, "Environment", 0, _winreg.KEY_READ | _winreg.KEY_WRITE)
+	key = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, "Environment", 0, winreg.KEY_READ | winreg.KEY_WRITE)
 	try:
-		value, typ = _winreg.QueryValueEx(key, "Path")
+		value, typ = winreg.QueryValueEx(key, "Path")
 	except:
-		value, typ = None, _winreg.REG_EXPAND_SZ
+		value, typ = None, winreg.REG_EXPAND_SZ
 	if value is None:
 		value = ""
 	dir = os.path.dirname(__file__)
@@ -53,7 +57,7 @@ def onInstall(postPathBug = False):
 			value += ";"
 		value += dir
 		log.info("new PATH: %r" % value)
-		_winreg.SetValueEx(key, "Path", None, typ, value)
+		winreg.SetValueEx(key, "Path", None, typ, value)
 		sendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, u"Environment")
 def onUninstall():
 	path = os.path.join(config.getUserDefaultConfigPath(), ".dbInstall")
@@ -61,9 +65,9 @@ def onUninstall():
 		#This is an update. Bail.
 		os.remove(path)
 		return
-	key = _winreg.OpenKeyEx(_winreg.HKEY_CURRENT_USER, "Environment", 0, _winreg.KEY_READ | _winreg.KEY_WRITE)
+	key = winreg.OpenKeyEx(winreg.HKEY_CURRENT_USER, "Environment", 0, winreg.KEY_READ | winreg.KEY_WRITE)
 	try:
-		value, typ = _winreg.QueryValueEx(key, "Path")
+		value, typ = winreg.QueryValueEx(key, "Path")
 	except:
 		return
 	if value is None or value == "":
@@ -76,5 +80,5 @@ def onUninstall():
 		value = value.replace(";" + dir, "")
 		value = value.replace(dir + ";", "")
 		value = value.replace(dir, "")
-		_winreg.SetValueEx(key, "Path", None, typ, value)
+		winreg.SetValueEx(key, "Path", None, typ, value)
 		sendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, u"Environment")
